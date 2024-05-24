@@ -162,7 +162,9 @@ class RouteAnchors(QRoute):
         # merge all the polygons
         polygons = self.design.components[component_name].qgeometry_list('poly')
         boundary = gpd.GeoSeries(unary_union(polygons + paths_converted))
-        boundary_coords = list(boundary.geometry.exterior[0].coords)
+        boundary_coords = []
+        if boundary.geometry.exterior[0] is not None:
+            boundary_coords.append(boundary.geometry.exterior[0].coords)
         if any(
                 intersecting(segment[0], segment[1], boundary_coords[i],
                              boundary_coords[i + 1])
